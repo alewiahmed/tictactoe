@@ -1,7 +1,29 @@
 .App {
+  width: 100%;
+  height: 100%;
+  display: flex;
   text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .App-title {
   font-size: 1.5em;
+}
+
+.container {
+  width: 360px;
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(40, 40, 40, 1)
+    radial-gradient(center, rgb(42, 51, 68), rgba(0, 20, 20, 0.6));
+}
+
+.row {
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
