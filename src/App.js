@@ -6,8 +6,8 @@ import SingleCell from './components/SingleCell/';
 class App extends Component {
   state = {
     cells: ['', '', '', '', '', '', '', '', ''],
-    player1: 'X',
-    player2: 'O',
+    player1: null,
+    player2: null,
     currentTurn: 'player1',
     multiplayer: null
   };
@@ -61,6 +61,41 @@ class App extends Component {
     });
   };
 
+  selectSymbol = symbol => {
+    this.setState({
+      player1: symbol,
+      player2: symbol === 'X' ? 'O' : 'X'
+    });
+  };
+
+  showSymbolSelector = () => {
+    return (
+      <div className="overlay">
+        <div className="selector-container">
+          <p className="selector-text">Would you like to be X or O?</p>
+          <div className="selector-button-container">
+            <button
+              className="selector-button"
+              onClick={() => {
+                this.selectSymbol('X');
+              }}
+            >
+              <p className="button-text">X</p>
+            </button>
+            <button
+              className="selector-button"
+              onClick={() => {
+                this.selectSymbol('O');
+              }}
+            >
+              <p className="button-text">O</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   showPlayerSelector = () => {
     return (
       <div className="overlay">
@@ -92,12 +127,15 @@ class App extends Component {
   };
 
   render() {
-    let { multiplayer } = this.state;
+    let { multiplayer, player1 } = this.state;
     return (
       <div className="App">
         <div className="container">
           {this.showCells()}
-          {multiplayer == null ? this.showPlayerSelector() : null}
+          {multiplayer === null ? this.showPlayerSelector() : null}
+          {multiplayer !== null && player1 === null
+            ? this.showSymbolSelector()
+            : null}
         </div>
       </div>
     );
