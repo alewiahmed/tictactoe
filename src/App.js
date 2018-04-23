@@ -7,15 +7,27 @@ class App extends Component {
   state = {
     cells: ['', '', '', '', '', '', '', '', ''],
     player1: 'X',
+    player2: 'O',
     currentTurn: 'player1',
-    multiplayer: false
+    multiplayer: null
+  };
+
+  nextPlayer = () => {
+    this.setState(state => {
+      state.currentTurn =
+        state.currentTurn === 'player1' ? 'player2' : 'player1';
+      return state;
+    });
   };
 
   selectCell = id => {
+    let { cells } = this.state;
+    if (cells[id] !== '') return;
     this.setState(state => {
       state.cells[id] = state[state.currentTurn];
       return state;
     });
+    this.nextPlayer();
   };
 
   showCells = () => {
