@@ -55,10 +55,50 @@ class App extends Component {
     return cellsElement;
   };
 
+  selectPlayType = type => {
+    this.setState({
+      multiplayer: type === 1 ? false : true
+    });
+  };
+
+  showPlayerSelector = () => {
+    return (
+      <div className="overlay">
+        <div className="selector-container">
+          <p className="selector-text">How do you want to play?</p>
+          <div className="selector-button-container">
+            <button
+              id="1"
+              className="selector-button"
+              onClick={() => {
+                this.selectPlayType(1);
+              }}
+            >
+              <p className="button-text">One Player</p>
+            </button>
+            <button
+              id="1"
+              className="selector-button"
+              onClick={() => {
+                this.selectPlayType(2);
+              }}
+            >
+              <p className="button-text">Two Players</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   render() {
+    let { multiplayer } = this.state;
     return (
       <div className="App">
-        <div className="container">{this.showCells()}</div>
+        <div className="container">
+          {this.showCells()}
+          {multiplayer == null ? this.showPlayerSelector() : null}
+        </div>
       </div>
     );
   }
