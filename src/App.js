@@ -10,16 +10,28 @@ class App extends Component {
     player1Score: 0,
     player2Score: 0,
     multiplayer: null,
-    currentTurn: 'player1',
+    currentTurn: null,
     cells: ['', '', '', '', '', '', '', '', '']
   };
 
   nextPlayer = () => {
+    let { currentTurn } = this.state;
+    if (!currentTurn) {
+      currentTurn = Math.floor(Math.random() * 2) === 1 ? 'player2' : 'player1';
+      this.setState({
+        currentTurn
+      });
+      return;
+    }
     this.setState(state => {
       state.currentTurn =
         state.currentTurn === 'player1' ? 'player2' : 'player1';
       return state;
     });
+  };
+
+  startGame = () => {
+    this.nextPlayer();
   };
 
   selectCell = id => {
@@ -64,10 +76,10 @@ class App extends Component {
   };
 
   selectSymbol = symbol => {
-    this.setState({
-      player1: symbol,
-      player2: symbol === 'X' ? 'O' : 'X'
-    });
+    this.setState(state => {
+      state.player1 = symbol;
+      state.player2 = symbol === 'X' ? 'O' : 'X';
+    }, this.startGame);
   };
 
   showSymbolSelector = () => {
@@ -135,20 +147,24 @@ class App extends Component {
       player1Score: 0,
       player2Score: 0,
       multiplayer: null,
-      currentTurn: 'player1',
+      currentTurn: null,
       cells: ['', '', '', '', '', '', '', '', '']
     });
   };
 
   showScore = () => {
-    let { player1Score, player2Score, multiplayer } = this.state;
+    let { player1Score, player2Score, multiplayer, currentTurn } = this.state;
+    let player1Class =
+      currentTurn === 'player1' ? 'single-score current-turn' : 'single-score';
+    let player2Class =
+      currentTurn === 'player2' ? 'single-score current-turn' : 'single-score';
     return (
       <div className="score-container">
-        <div className="single-score">
+        <div className={player1Class}>
           <p className="player-text">Player one</p>
           <p className="score">{player1Score}</p>
         </div>
-        <div className="single-score">
+        <div className={player2Class}>
           <p className="player-text">
             {multiplayer ? 'Player Two' : 'Computer'}
           </p>

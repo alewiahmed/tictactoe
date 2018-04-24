@@ -95,7 +95,7 @@
   display: flex;
   flex-direction: row;
   align-content: center;
-  padding: 0 20px 10px 20px;
+  padding: 0 20px;
   justify-content: space-around;
 }
 
@@ -120,6 +120,10 @@
 }
 
 .single-score {
-  padding: 0 10px;
+  padding: 10px;
   color: #616161;
+}
+
+.current-turn {
+  background-color: #0cfd00;
 }
