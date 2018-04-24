@@ -61,6 +61,14 @@ class App extends Component {
       }
       if (winners.length) break;
     }
+    if (
+      player1Cells.length + player2Cells.length === 9 &&
+      winners.length == 0
+    ) {
+      this.setState({
+        gameFinishMessage: 'It was a draw..'
+      });
+    }
     if (!winners.length) return;
     this.setState(state => {
       if (!state.multiplayer) {
@@ -75,7 +83,6 @@ class App extends Component {
       winners.forEach(value => (state.cells[value].won = true));
       return state;
     });
-    // this.resetGame();
   };
 
   nextPlayer = () => {
