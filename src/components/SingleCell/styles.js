@@ -17,5 +17,9 @@ export default {
   text: {
     fontSize: '90px',
     color: '#dedede'
+  },
+  won: {
+    backgroundColor: 'black',
+    color: 'blue'
   }
 };

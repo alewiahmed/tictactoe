@@ -9,9 +9,67 @@ class App extends Component {
     player2: null,
     player1Score: 0,
     player2Score: 0,
+    player1Cells: [],
+    player2Cells: [],
     multiplayer: null,
     currentTurn: null,
-    cells: ['', '', '', '', '', '', '', '', '']
+    cells: [
+      { value: '', win: false },
+      { value: '', win: false },
+      { value: '', win: false },
+      { value: '', win: false },
+      { value: '', win: false },
+      { value: '', win: false },
+      { value: '', win: false },
+      { value: '', win: false },
+      { value: '', win: false }
+    ],
+    magicSquares: [8, 1, 6, 3, 5, 7, 4, 9, 2]
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    let { currentTurn: prevTurn } = prevState;
+    let { currentTurn, cells } = this.state;
+    let pushed = cells.filter(cell => {
+      return cell.value !== '';
+    }).length;
+    if (
+      prevTurn !== null &&
+      currentTurn !== null &&
+      prevTurn !== currentTurn &&
+      pushed >= 5
+    ) {
+      this.checkGame();
+    }
+  };
+
+  checkGame = () => {
+    let { player1Cells, player2Cells, currentTurn } = this.state;
+    let player = currentTurn === 'player1' ? 'player2' : 'player1';
+    let arr = player === 'player1' ? player1Cells : player2Cells;
+    let winners = [];
+    for (var i = 0; i < arr.length - 2; i++) {
+      for (var j = i + 1; j < arr.length; j++) {
+        for (var k = j + 1; k < arr.length; k++) {
+          if (arr[i].value + arr[j].value + arr[k].value === 15) {
+            winners.push(arr[i].id, arr[j].id, arr[k].id);
+            break;
+          }
+        }
+        if (winners.length) break;
+      }
+      if (winners.length) break;
+    }
+    if (!winners.length) return;
+    this.setState(state => {
+      state[`${player}Score`]++;
+      state.currentTurn = player;
+      winners.forEach(value => {
+        state.cells[value].won = true;
+      });
+      return state;
+    });
+    // this.resetGame();
   };
 
   nextPlayer = () => {
@@ -36,9 +94,13 @@ class App extends Component {
 
   selectCell = id => {
     let { cells } = this.state;
-    if (cells[id] !== '') return;
+    if (cells[id].value !== '') return;
     this.setState(state => {
-      state.cells[id] = state[state.currentTurn];
+      let { currentTurn, magicSquares } = state;
+      state.cells[id].value = state[state.currentTurn];
+      currentTurn === 'player1'
+        ? state.player1Cells.push({ id, value: magicSquares[id] })
+        : state.player2Cells.push({ id, value: magicSquares[id] });
       return state;
     });
     this.nextPlayer();
@@ -53,7 +115,8 @@ class App extends Component {
         <SingleCell
           id={index}
           key={index}
-          value={cells[index]}
+          won={cells[index].won}
+          value={cells[index].value}
           onClick={this.selectCell}
         />
       );
@@ -142,13 +205,43 @@ class App extends Component {
 
   resetGame = () => {
     this.setState({
+      player1Cells: [],
+      player2Cells: [],
+      cells: [
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false }
+      ]
+    });
+  };
+
+  resetEverything = () => {
+    this.setState({
       player1: null,
       player2: null,
       player1Score: 0,
       player2Score: 0,
+      player1Cells: [],
+      player2Cells: [],
       multiplayer: null,
       currentTurn: null,
-      cells: ['', '', '', '', '', '', '', '', '']
+      cells: [
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false }
+      ]
     });
   };
 
@@ -173,7 +266,7 @@ class App extends Component {
         <button
           className="reset-button"
           onClick={() => {
-            this.resetGame();
+            this.resetEverything();
           }}
         >
           Reset All
