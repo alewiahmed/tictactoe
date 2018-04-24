@@ -13,6 +13,7 @@ class App extends Component {
     player2Cells: [],
     multiplayer: null,
     currentTurn: null,
+    gameFinishMessage: '',
     cells: [
       { value: '', win: false },
       { value: '', win: false },
@@ -62,11 +63,16 @@ class App extends Component {
     }
     if (!winners.length) return;
     this.setState(state => {
+      if (!state.multiplayer) {
+        state.gameFinishMessage =
+          player === 'player1' ? 'Omg, you won!!!' : 'Uh oh, you lost..';
+      } else {
+        state.gameFinishMessage =
+          player === 'player1' ? 'Player 1 wins!! :D' : 'Player 2 wins!! :D';
+      }
       state[`${player}Score`]++;
       state.currentTurn = player;
-      winners.forEach(value => {
-        state.cells[value].won = true;
-      });
+      winners.forEach(value => (state.cells[value].won = true));
       return state;
     });
     // this.resetGame();
@@ -203,48 +209,6 @@ class App extends Component {
     );
   };
 
-  resetGame = () => {
-    this.setState({
-      player1Cells: [],
-      player2Cells: [],
-      cells: [
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false }
-      ]
-    });
-  };
-
-  resetEverything = () => {
-    this.setState({
-      player1: null,
-      player2: null,
-      player1Score: 0,
-      player2Score: 0,
-      player1Cells: [],
-      player2Cells: [],
-      multiplayer: null,
-      currentTurn: null,
-      cells: [
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false }
-      ]
-    });
-  };
-
   showScore = () => {
     let { player1Score, player2Score, multiplayer, currentTurn } = this.state;
     let player1Class =
@@ -275,6 +239,65 @@ class App extends Component {
     );
   };
 
+  showGameMessage = () => {
+    let { gameFinishMessage } = this.state;
+    if (!gameFinishMessage) return null;
+    setTimeout(() => {
+      this.resetGame();
+    }, 2000);
+    return (
+      <div className="overlay">
+        <div className="result-container">
+          <p className="result-text">{gameFinishMessage}</p>
+        </div>
+      </div>
+    );
+  };
+
+  resetGame = () => {
+    this.setState({
+      player1Cells: [],
+      player2Cells: [],
+      gameFinishMessage: '',
+      cells: [
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false }
+      ]
+    });
+  };
+
+  resetEverything = () => {
+    this.setState({
+      player1: null,
+      player2: null,
+      player1Score: 0,
+      player2Score: 0,
+      player1Cells: [],
+      player2Cells: [],
+      multiplayer: null,
+      currentTurn: null,
+      gameFinishMessage: '',
+      cells: [
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false },
+        { value: '', win: false }
+      ]
+    });
+  };
+
   render() {
     let { multiplayer, player1 } = this.state;
     return (
@@ -287,6 +310,7 @@ class App extends Component {
             {multiplayer !== null && player1 === null
               ? this.showSymbolSelector()
               : null}
+            {this.showGameMessage()}
           </div>
         </div>
       </div>

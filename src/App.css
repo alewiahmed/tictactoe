@@ -51,7 +51,7 @@
   position: absolute;
   align-items: center;
   justify-content: center;
-  background-color: #6919197d;
+  background-color: #040101ab;
 }
 
 .row {
@@ -126,4 +126,15 @@
 
 .current-turn {
   background-color: #0cfd00;
+}
+
+.result-container {
+  padding: 20px;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.result-text {
+  font-size: 40px;
+  color: white;
 }
