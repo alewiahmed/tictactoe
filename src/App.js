@@ -126,16 +126,42 @@ class App extends Component {
     );
   };
 
+  showScore = () => {
+    return (
+      <div className="score-container">
+        <div className="single-score">
+          <p className="player-text">Player One</p>
+          <p className="score">0</p>
+        </div>
+        <div className="single-score">
+          <p className="player-text">Player Two</p>
+          <p className="score">0</p>
+        </div>
+        <button
+          className="reset-button"
+          onClick={() => {
+            //this.resetGame();
+          }}
+        >
+          Reset All
+        </button>
+      </div>
+    );
+  };
+
   render() {
     let { multiplayer, player1 } = this.state;
     return (
       <div className="App">
         <div className="container">
-          {this.showCells()}
-          {multiplayer === null ? this.showPlayerSelector() : null}
-          {multiplayer !== null && player1 === null
-            ? this.showSymbolSelector()
-            : null}
+          {multiplayer === null || player1 === null ? null : this.showScore()}
+          <div className="game-container">
+            {this.showCells()}
+            {multiplayer === null ? this.showPlayerSelector() : null}
+            {multiplayer !== null && player1 === null
+              ? this.showSymbolSelector()
+              : null}
+          </div>
         </div>
       </div>
     );
