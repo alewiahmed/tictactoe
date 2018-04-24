@@ -5,11 +5,13 @@ import SingleCell from './components/SingleCell/';
 
 class App extends Component {
   state = {
-    cells: ['', '', '', '', '', '', '', '', ''],
     player1: null,
     player2: null,
+    player1Score: 0,
+    player2Score: 0,
+    multiplayer: null,
     currentTurn: 'player1',
-    multiplayer: null
+    cells: ['', '', '', '', '', '', '', '', '']
   };
 
   nextPlayer = () => {
@@ -126,21 +128,36 @@ class App extends Component {
     );
   };
 
+  resetGame = () => {
+    this.setState({
+      player1: null,
+      player2: null,
+      player1Score: 0,
+      player2Score: 0,
+      multiplayer: null,
+      currentTurn: 'player1',
+      cells: ['', '', '', '', '', '', '', '', '']
+    });
+  };
+
   showScore = () => {
+    let { player1Score, player2Score, multiplayer } = this.state;
     return (
       <div className="score-container">
         <div className="single-score">
-          <p className="player-text">Player One</p>
-          <p className="score">0</p>
+          <p className="player-text">Player one</p>
+          <p className="score">{player1Score}</p>
         </div>
         <div className="single-score">
-          <p className="player-text">Player Two</p>
-          <p className="score">0</p>
+          <p className="player-text">
+            {multiplayer ? 'Player Two' : 'Computer'}
+          </p>
+          <p className="score">{player2Score}</p>
         </div>
         <button
           className="reset-button"
           onClick={() => {
-            //this.resetGame();
+            this.resetGame();
           }}
         >
           Reset All
