@@ -112,18 +112,97 @@ class App extends Component {
   };
 
   nextMove = () => {
-    let { player1Cells, player2Cells } = this.state;
+    let { player1Cells, player2Cells, cells } = this.state;
     if (player1Cells.length + player2Cells.length === 9) return;
-    let { cells } = this.state;
-    let arr = cells.reduce((acc, cell, index) => {
-      if (cell.value !== '') return acc;
-      acc.push(index);
-      return acc;
-    }, []);
-    let random = Math.floor(Math.random() * arr.length);
+    let board = [];
+    board = cells.map(cell => {
+      return cell.value;
+    });
+    let bestMove = this.findBestMove(board);
     setTimeout(() => {
-      this.selectCell(arr[random]);
+      this.selectCell(bestMove);
     }, 1300);
+  };
+
+  isMovesLeft = board => {
+    return board.some(cell => {
+      return cell === '';
+    });
+  };
+
+  findBestMove = board => {
+    let { player1 } = this.state;
+    let bestScore = -Infinity,
+      nextMove;
+    board.forEach((cell, index) => {
+      if (cell != '') return;
+      let checkBoard = [...board];
+      checkBoard[index] = player1 === 'X' ? 'O' : 'X';
+      let currentMove = this.minimax(checkBoard, 1, false);
+      nextMove = currentMove > bestScore ? index : nextMove;
+      bestScore = bestScore > currentMove ? bestScore : currentMove;
+    });
+    return nextMove;
+  };
+
+  evaluate = (board, depth) => {
+    let { player1, magicSquares } = this.state;
+    let player1Cells = [],
+      player2Cells = [];
+    board.forEach((cell, index) => {
+      if (cell === player1) {
+        player1Cells.push(magicSquares[index]);
+      } else if (cell !== '') {
+        player2Cells.push(magicSquares[index]);
+      }
+    });
+    let arr = [player1Cells, player2Cells];
+    for (let m = 0; m < arr.length; m++) {
+      let array = arr[m];
+      for (let i = 0; i < array.length - 2; i++) {
+        for (let j = i + 1; j < array.length; j++) {
+          for (let k = j + 1; k < array.length; k++) {
+            if (array[i] + array[j] + array[k] === 15) {
+              if (m == 0) return depth - 10;
+              return 10 - depth;
+            }
+          }
+        }
+      }
+    }
+    return 0;
+  };
+
+  minimax = (board, depth, isMaximizingPlayer) => {
+    let { player1 } = this.state;
+    let sign = player1 == 'X' ? 'O' : 'X';
+    sign = isMaximizingPlayer ? sign : player1;
+    let bestVal;
+    let score = this.evaluate(board, depth);
+    if ((score == 0 && !this.isMovesLeft(board)) || score !== 0) {
+      return score;
+    }
+    if (isMaximizingPlayer) {
+      bestVal = -Infinity;
+      board.forEach((cell, index) => {
+        if (cell !== '') return;
+        let checkBoard = [...board];
+        checkBoard[index] = sign;
+        let value = this.minimax(checkBoard, depth + 1, false);
+        bestVal = Math.max(value, bestVal);
+      });
+      return bestVal;
+    } else {
+      bestVal = Infinity;
+      board.forEach((cell, index) => {
+        if (cell !== '') return;
+        let checkBoard = [...board];
+        checkBoard[index] = sign;
+        let value = this.minimax(checkBoard, depth + 1, true);
+        bestVal = Math.min(value, bestVal);
+      });
+      return bestVal;
+    }
   };
 
   selectCell = id => {
