@@ -118,7 +118,10 @@ class App extends Component {
     board = cells.map(cell => {
       return cell.value;
     });
-    let bestMove = this.findBestMove(board);
+    let bestMove;
+    if (player1Cells.length + player2Cells.length == 0)
+      bestMove = Math.floor(Math.random() * 9);
+    else bestMove = this.findBestMove(board);
     setTimeout(() => {
       this.selectCell(bestMove);
     }, 1300);
