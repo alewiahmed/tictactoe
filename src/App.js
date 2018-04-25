@@ -15,39 +15,26 @@ class App extends Component {
     currentTurn: null,
     gameFinishMessage: '',
     cells: [
-      { value: '', win: false },
-      { value: '', win: false },
-      { value: '', win: false },
-      { value: '', win: false },
-      { value: '', win: false },
-      { value: '', win: false },
-      { value: '', win: false },
-      { value: '', win: false },
-      { value: '', win: false }
+      { value: '', won: false },
+      { value: '', won: false },
+      { value: '', won: false },
+      { value: '', won: false },
+      { value: '', won: false },
+      { value: '', won: false },
+      { value: '', won: false },
+      { value: '', won: false },
+      { value: '', won: false }
     ],
     magicSquares: [8, 1, 6, 3, 5, 7, 4, 9, 2]
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    let { currentTurn: prevTurn } = prevState;
-    let { currentTurn, cells } = this.state;
+  checkGame = () => {
+    let { player1Cells, player2Cells, currentTurn, cells } = this.state;
     let pushed = cells.filter(cell => {
       return cell.value !== '';
     }).length;
-    if (
-      prevTurn !== null &&
-      currentTurn !== null &&
-      prevTurn !== currentTurn &&
-      pushed >= 5
-    ) {
-      this.checkGame();
-    }
-  };
-
-  checkGame = () => {
-    let { player1Cells, player2Cells, currentTurn } = this.state;
-    let player = currentTurn === 'player1' ? 'player2' : 'player1';
-    let arr = player === 'player1' ? player1Cells : player2Cells;
+    if (pushed < 5) return this.nextPlayer();
+    let arr = currentTurn === 'player1' ? player1Cells : player2Cells;
     let winners = [];
     for (var i = 0; i < arr.length - 2; i++) {
       for (var j = i + 1; j < arr.length; j++) {
@@ -65,44 +52,78 @@ class App extends Component {
       player1Cells.length + player2Cells.length === 9 &&
       winners.length == 0
     ) {
-      this.setState({
-        gameFinishMessage: 'It was a draw..'
-      });
+      return setTimeout(() => {
+        this.setState({
+          gameFinishMessage: 'It was a draw..'
+        });
+      }, 1000);
     }
-    if (!winners.length) return;
+    if (!winners.length) return this.nextPlayer();
     this.setState(state => {
-      if (!state.multiplayer) {
-        state.gameFinishMessage =
-          player === 'player1' ? 'Omg, you won!!!' : 'Uh oh, you lost..';
-      } else {
-        state.gameFinishMessage =
-          player === 'player1' ? 'Player 1 wins!! :D' : 'Player 2 wins!! :D';
-      }
-      state[`${player}Score`]++;
-      state.currentTurn = player;
+      state[`${currentTurn}Score`]++;
       winners.forEach(value => (state.cells[value].won = true));
       return state;
-    });
+    }, this.setWinner);
+  };
+
+  setWinner = () => {
+    let { currentTurn, multiplayer } = this.state;
+    console.log('setWinner ', currentTurn, multiplayer);
+    let gameFinishMessage = '';
+    return setTimeout(() => {
+      if (!multiplayer) {
+        gameFinishMessage =
+          currentTurn === 'player1' ? 'Omg, you won!!!' : 'Uh oh, you lost..';
+      } else {
+        gameFinishMessage =
+          currentTurn === 'player1'
+            ? 'Player 1 wins!! :D'
+            : 'Player 2 wins!! :D';
+      }
+      this.setState({
+        currentTurn,
+        gameFinishMessage
+      });
+    }, 1000);
   };
 
   nextPlayer = () => {
-    let { currentTurn } = this.state;
-    if (!currentTurn) {
-      currentTurn = Math.floor(Math.random() * 2) === 1 ? 'player2' : 'player1';
-      this.setState({
-        currentTurn
-      });
-      return;
-    }
+    if (this.state.gameFinishMessage !== '') return;
     this.setState(state => {
-      state.currentTurn =
-        state.currentTurn === 'player1' ? 'player2' : 'player1';
+      let { currentTurn } = state;
+      if (!currentTurn) {
+        currentTurn =
+          Math.floor(Math.random() * 2) === 1 ? 'player2' : 'player1';
+      } else {
+        currentTurn = currentTurn === 'player1' ? 'player2' : 'player1';
+      }
+      state.currentTurn = currentTurn;
       return state;
-    });
+    }, this.checkNextTurn);
   };
 
   startGame = () => {
     this.nextPlayer();
+  };
+
+  checkNextTurn = () => {
+    let { currentTurn, multiplayer } = this.state;
+    if (!multiplayer && currentTurn === 'player2') this.nextMove();
+  };
+
+  nextMove = () => {
+    let { player1Cells, player2Cells } = this.state;
+    if (player1Cells.length + player2Cells.length === 9) return;
+    let { cells } = this.state;
+    let arr = cells.reduce((acc, cell, index) => {
+      if (cell.value !== '') return acc;
+      acc.push(index);
+      return acc;
+    }, []);
+    let random = Math.floor(Math.random() * arr.length);
+    setTimeout(() => {
+      this.selectCell(arr[random]);
+    }, 1300);
   };
 
   selectCell = id => {
@@ -115,21 +136,20 @@ class App extends Component {
         ? state.player1Cells.push({ id, value: magicSquares[id] })
         : state.player2Cells.push({ id, value: magicSquares[id] });
       return state;
-    });
-    this.nextPlayer();
+    }, this.checkGame);
   };
 
   showCells = () => {
     let { cells } = this.state;
     let cellsElement = [];
     let innerCells = [];
-    cells.forEach((_, index) => {
+    cells.forEach((cell, index) => {
       innerCells.push(
         <SingleCell
           id={index}
           key={index}
-          won={cells[index].won}
-          value={cells[index].value}
+          won={cell.won}
+          value={cell.value}
           onClick={this.selectCell}
         />
       );
@@ -251,7 +271,8 @@ class App extends Component {
     if (!gameFinishMessage) return null;
     setTimeout(() => {
       this.resetGame();
-    }, 2000);
+      this.startGame();
+    }, 1500);
     return (
       <div className="overlay">
         <div className="result-container">
@@ -267,15 +288,15 @@ class App extends Component {
       player2Cells: [],
       gameFinishMessage: '',
       cells: [
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false }
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false }
       ]
     });
   };
@@ -292,15 +313,15 @@ class App extends Component {
       currentTurn: null,
       gameFinishMessage: '',
       cells: [
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false },
-        { value: '', win: false }
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false },
+        { value: '', won: false }
       ]
     });
   };
