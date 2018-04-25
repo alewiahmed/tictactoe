@@ -54,7 +54,8 @@ class App extends Component {
     ) {
       return setTimeout(() => {
         this.setState({
-          gameFinishMessage: 'It was a draw..'
+          gameFinishMessage: 'It was a draw..',
+          currentTurn: null
         });
       }, 1000);
     }
@@ -68,7 +69,6 @@ class App extends Component {
 
   setWinner = () => {
     let { currentTurn, multiplayer } = this.state;
-    console.log('setWinner ', currentTurn, multiplayer);
     let gameFinishMessage = '';
     return setTimeout(() => {
       if (!multiplayer) {
@@ -81,8 +81,8 @@ class App extends Component {
             : 'Player 2 wins!! :D';
       }
       this.setState({
-        currentTurn,
-        gameFinishMessage
+        gameFinishMessage,
+        currentTurn: currentTurn === 'player1' ? 'player2' : 'player1'
       });
     }, 1000);
   };
@@ -237,11 +237,21 @@ class App extends Component {
   };
 
   showScore = () => {
-    let { player1Score, player2Score, multiplayer, currentTurn } = this.state;
+    let {
+      multiplayer,
+      currentTurn,
+      player1Score,
+      player2Score,
+      gameFinishMessage
+    } = this.state;
     let player1Class =
-      currentTurn === 'player1' ? 'single-score current-turn' : 'single-score';
+      currentTurn === 'player1' && gameFinishMessage == ''
+        ? 'single-score current-turn'
+        : 'single-score';
     let player2Class =
-      currentTurn === 'player2' ? 'single-score current-turn' : 'single-score';
+      currentTurn === 'player2' && gameFinishMessage == ''
+        ? 'single-score current-turn'
+        : 'single-score';
     return (
       <div className="score-container">
         <div className={player1Class}>
