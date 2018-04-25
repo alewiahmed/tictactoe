@@ -222,7 +222,7 @@ class App extends Component {
   };
 
   showCells = () => {
-    let { cells } = this.state;
+    let { cells, currentTurn, multiplayer } = this.state;
     let cellsElement = [];
     let innerCells = [];
     cells.forEach((cell, index) => {
@@ -232,7 +232,11 @@ class App extends Component {
           key={index}
           won={cell.won}
           value={cell.value}
-          onClick={this.selectCell}
+          onClick={
+            currentTurn == 'player2' && !multiplayer
+              ? () => {}
+              : this.selectCell
+          }
         />
       );
       if ((index + 1) % 3 == 0) {
