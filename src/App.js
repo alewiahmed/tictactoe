@@ -138,7 +138,7 @@ class App extends Component {
     let bestScore = -Infinity,
       nextMove;
     board.forEach((cell, index) => {
-      if (cell != '') return;
+      if (cell !== '') return;
       let checkBoard = [...board];
       checkBoard[index] = player1 === 'X' ? 'O' : 'X';
       let currentMove = this.minimax(checkBoard, 1, false);
@@ -166,8 +166,8 @@ class App extends Component {
         for (let j = i + 1; j < array.length; j++) {
           for (let k = j + 1; k < array.length; k++) {
             if (array[i] + array[j] + array[k] === 15) {
-              if (m == 0) return depth - 10;
-              return 10 - depth;
+              if (m === 1) return 10 - depth;
+              return depth - 10;
             }
           }
         }
@@ -178,7 +178,7 @@ class App extends Component {
 
   minimax = (board, depth, isMaximizingPlayer) => {
     let { player1 } = this.state;
-    let sign = player1 == 'X' ? 'O' : 'X';
+    let sign = player1 === 'X' ? 'O' : 'X';
     sign = isMaximizingPlayer ? sign : player1;
     let bestVal;
     let score = this.evaluate(board, depth);
@@ -327,11 +327,11 @@ class App extends Component {
       gameFinishMessage
     } = this.state;
     let player1Class =
-      currentTurn === 'player1' && gameFinishMessage == ''
+      currentTurn === 'player1' && gameFinishMessage === ''
         ? 'single-score current-turn'
         : 'single-score';
     let player2Class =
-      currentTurn === 'player2' && gameFinishMessage == ''
+      currentTurn === 'player2' && gameFinishMessage === ''
         ? 'single-score current-turn'
         : 'single-score';
     return (
