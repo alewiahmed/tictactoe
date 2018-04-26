@@ -1,9 +1,9 @@
 export default {
   cell: {
+    margin: '2px',
     width: '120px',
     display: 'flex',
     height: '120px',
-    margin: '2px',
     cursor: 'pointer',
     alignItems: 'center',
     justifyContent: 'center',
@@ -17,7 +17,9 @@ export default {
   },
   text: {
     fontSize: '90px',
-    color: '#dedede'
+    color: '#dedede',
+    fontFamily: "'Handlee', cursive"
+    // fontFamily: "'Nanum Brush Script', cursive"
   },
   won: {
     backgroundColor: 'black',

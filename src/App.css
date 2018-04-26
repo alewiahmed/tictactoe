@@ -5,6 +5,11 @@
   text-align: center;
   align-items: center;
   justify-content: center;
+  font-family: 'Handlee', cursive, Helvetica, sans-serif;
+}
+
+button {
+  font-family: 'Handlee', cursive, Helvetica, sans-serif;
 }
 
 .App-title {
@@ -74,7 +79,7 @@
 .selector-button {
   cursor: pointer;
   background: none;
-  padding: 5px 10px;
+  padding: 3px 10px;
   border-radius: 20px;
   border: 2px solid #02d0cd;
 }
@@ -85,9 +90,11 @@
 
 .symbol-button {
   border: none;
-  font-size: 25px;
   padding: 3px 8px;
   border-radius: 20px;
+}
+.symbol-button .button-text {
+  font-size: 25px;
 }
 
 .selector-text {
@@ -96,6 +103,7 @@
 
 .button-text {
   margin: 0;
+  font-size: 16px;
 }
 
 .selector-button:hover .button-text {
@@ -171,7 +179,7 @@
 }
 
 .back-button {
-  padding: 3px 10px;
+  padding: 0 10px;
 }
 
 .back-button-text {
