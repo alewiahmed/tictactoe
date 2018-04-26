@@ -272,7 +272,7 @@ class App extends Component {
           <p className="selector-text">Would you like to be X or O?</p>
           <div className="selector-button-container">
             <button
-              className="selector-button"
+              className="selector-button symbol-button"
               onClick={() => {
                 this.selectSymbol('X');
               }}
@@ -280,7 +280,7 @@ class App extends Component {
               <p className="button-text">X</p>
             </button>
             <button
-              className="selector-button"
+              className="selector-button symbol-button"
               onClick={() => {
                 this.selectSymbol('O');
               }}
