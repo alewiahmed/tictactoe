@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import SingleCell from './components/SingleCell/';
+import Grid from './components/Grid/';
 
 class App extends Component {
   state = {
@@ -248,7 +249,7 @@ class App extends Component {
         innerCells = [];
       }
     });
-    return cellsElement;
+    return <div className="cells-container">{cellsElement}</div>;
   };
 
   selectPlayType = type => {
@@ -429,6 +430,7 @@ class App extends Component {
         <div className="container">
           {multiplayer === null || player1 === null ? null : this.showScore()}
           <div className="game-container">
+            <Grid />
             {this.showCells()}
             {multiplayer === null ? this.showPlayerSelector() : null}
             {multiplayer !== null && player1 === null
