@@ -289,6 +289,14 @@ class App extends Component {
             </button>
           </div>
         </div>
+        <div className="back-button-container">
+          <button
+            className="selector-button back-button"
+            onClick={() => this.setState({ multiplayer: null })}
+          >
+            <p className="back-button-text">Back</p>
+          </button>
+        </div>
       </div>
     );
   };
