@@ -3,6 +3,7 @@ export default {
     width: '120px',
     display: 'flex',
     height: '120px',
+    margin: '2px',
     cursor: 'pointer',
     alignItems: 'center',
     justifyContent: 'center',

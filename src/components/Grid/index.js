@@ -10,17 +10,19 @@ export default class Grid extends Component {
   createGrid = () => {
     let ctx = this.canvas.getContext('2d');
     ctx.strokeStyle = '#dedede';
-    ctx.moveTo(100, 0);
-    ctx.lineTo(100, 400);
+    ctx.lineWidth = 1;
+    ctx.moveTo(99, 1);
+    ctx.lineTo(99, 149);
     ctx.stroke();
-    ctx.moveTo(200, 0);
-    ctx.lineTo(200, 400);
+    ctx.moveTo(201, 1);
+    ctx.lineTo(201, 149);
     ctx.stroke();
-    ctx.moveTo(0, 50.5);
-    ctx.lineTo(300, 50.5);
+    ctx.lineWidth = 1;
+    ctx.moveTo(0, 49.5);
+    ctx.lineTo(300, 49.5);
     ctx.stroke();
-    ctx.moveTo(0, 100.5);
-    ctx.lineTo(300, 100.5);
+    ctx.moveTo(0, 99.5);
+    ctx.lineTo(300, 99.5);
     ctx.stroke();
   };
 
