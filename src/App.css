@@ -125,7 +125,17 @@
 }
 
 .current-turn {
+  animation-name: scale;
+  animation-duration: 0.4s;
   background-color: #0cfd00;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+}
+
+@keyframes scale {
+  to {
+    transform: scale(1.2);
+  }
 }
 
 .result-container {
