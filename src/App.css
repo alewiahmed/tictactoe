@@ -4,7 +4,8 @@
   display: flex;
   text-align: center;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
   font-family: 'Handlee', cursive, Helvetica, sans-serif;
 }
 
@@ -186,4 +187,9 @@ button {
   color: white;
   font-size: 20px;
   margin: 0;
+}
+
+.github-link a {
+  color: black;
+  text-decoration: none;
 }
