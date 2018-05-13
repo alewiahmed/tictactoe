@@ -1,11 +1,6 @@
 .App {
   width: 100%;
-  height: 100%;
-  display: flex;
   text-align: center;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-around;
   font-family: 'Handlee', cursive, Helvetica, sans-serif;
 }
 
@@ -21,6 +16,8 @@ button {
   width: 400px;
   display: flex;
   padding: 30px;
+  margin: 20px auto;
+  position: relative;
   align-items: center;
   border-radius: 10px;
   flex-direction: column;
@@ -192,4 +189,8 @@ button {
 .github-link a {
   color: black;
   text-decoration: none;
+}
+
+.github-link {
+  margin-top: 30px;
 }

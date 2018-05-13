@@ -19,7 +19,6 @@ export default {
     fontSize: '90px',
     color: '#dedede',
     fontFamily: "'Handlee', cursive"
-    // fontFamily: "'Nanum Brush Script', cursive"
   },
   won: {
     backgroundColor: 'black',
