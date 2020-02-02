@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import SingleCell from './components/SingleCell/';
 import Grid from './components/Grid/';
+import SingleCell from './components/SingleCell/';
 
 class App extends Component {
   state = {
@@ -51,7 +51,7 @@ class App extends Component {
     }
     if (
       player1Cells.length + player2Cells.length === 9 &&
-      winners.length == 0
+      winners.length === 0
     ) {
       return setTimeout(() => {
         this.setState({
@@ -120,7 +120,7 @@ class App extends Component {
       return cell.value;
     });
     let bestMove;
-    if (player1Cells.length + player2Cells.length == 0)
+    if (player1Cells.length + player2Cells.length === 0)
       bestMove = Math.floor(Math.random() * 9);
     else bestMove = this.findBestMove(board);
     setTimeout(() => {
@@ -183,7 +183,7 @@ class App extends Component {
     sign = isMaximizingPlayer ? sign : player1;
     let bestVal;
     let score = this.evaluate(board, depth);
-    if ((score == 0 && !this.isMovesLeft(board)) || score !== 0) {
+    if ((score === 0 && !this.isMovesLeft(board)) || score !== 0) {
       return score;
     }
     if (isMaximizingPlayer) {
@@ -234,13 +234,13 @@ class App extends Component {
           won={cell.won}
           value={cell.value}
           onClick={
-            currentTurn == 'player2' && !multiplayer
+            currentTurn === 'player2' && !multiplayer
               ? () => {}
               : this.selectCell
           }
         />
       );
-      if ((index + 1) % 3 == 0) {
+      if ((index + 1) % 3 === 0) {
         cellsElement.push(
           <div className="row" key={index + 1 / 3}>
             {innerCells}
